@@ -18,7 +18,7 @@ namespace EmployeeEditorUWP.ViewModels
         {
             Employee = new Employee(employee);
             var appView = Windows.UI.ViewManagement.ApplicationView.GetForCurrentView();
-            appView.Title = "Edit employee page";
+            appView.Title = "Edit employee";
         }
     }
 }

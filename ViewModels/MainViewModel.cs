@@ -77,12 +77,13 @@ namespace EmployeeEditorUWP.ViewModels
         [RelayCommand]
         public async void AddEmployee()
         {
-
-            var dialogUserControl = new EmployeeDialog();
-
+            
+            var dialog = new EmployeeDialog();
+            dialog.Title = "Add employee";
             var dialogViewModel = new AddEmployeeViewModel();
-            dialogUserControl.DataContext = dialogViewModel;
-            var result = await dialogUserControl.ShowAsync();
+
+            dialog.DataContext = dialogViewModel;
+            var result = await dialog.ShowAsync();
             if(result == ContentDialogResult.Primary)
             {
                 Employees.Add(dialogViewModel.Employee);
@@ -91,11 +92,11 @@ namespace EmployeeEditorUWP.ViewModels
         [RelayCommand]
         public async void EditEmployee(Employee employee)
         {
-            var dialogUserControl = new EmployeeDialog();
-
+            var dialog = new EmployeeDialog();
+            dialog.Title = "Edit employee";
             var dialogViewModel = new EditEmployeeViewModel(employee);
-            dialogUserControl.DataContext = dialogViewModel;
-            var result = await dialogUserControl.ShowAsync();
+            dialog.DataContext = dialogViewModel;
+            var result = await dialog.ShowAsync();
 
             if (result == ContentDialogResult.Primary)
             {
@@ -109,13 +110,3 @@ namespace EmployeeEditorUWP.ViewModels
         } 
     }
 }
-
-//@Arsen привіт, розпочнемо етап UWP (WinUI)  з вивчення роботи MVVM.
-//Загальні матеріали для вивчення фреймворків:
-//-UWP https://learn.microsoft.com/en-us/windows/uwp/develop/
-//-WinUI https://learn.microsoft.com/en-us/windows/apps/winui/
-//Перше завдання: -створити проєкт для додавання, редагування та видалення робітників.
-//Обов'язково MVVM.  Без коду в code-behind файлах. Використання файлів ресурсів для текстових даних. 
-//Використання Microsoft MVVM Toolkit - https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/
-
-//Вивчи всі статті по зв'язуванню даних та інтерфейсів https://learn.microsoft.com/en-us/windows/uwp/data-binding/
