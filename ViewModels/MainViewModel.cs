@@ -1,30 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using CommunityToolkit.Mvvm;
+using Windows.ApplicationModel.Resources;
+using Windows.UI.Xaml.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging;
-using CommunityToolkit.Mvvm.Messaging.Messages;
-
 
 using EmployeeEditorUWP.Models;
 using EmployeeEditorUWP.Views;
-using Windows.ApplicationModel.Core;
-using Windows.System;
-using Windows.UI.Core;
-using Windows.UI.ViewManagement;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 
 namespace EmployeeEditorUWP.ViewModels
 {
-    [INotifyPropertyChanged]
-    public partial class MainViewModel
+    //[INotifyPropertyChanged]
+    public partial class MainViewModel : ObservableObject
     {
         [ObservableProperty]
         private ObservableCollection<Employee> employees = new ObservableCollection<Employee>()
@@ -54,36 +42,19 @@ namespace EmployeeEditorUWP.ViewModels
         //        Debug.WriteLine(value);
         //    }
         //}
+        private readonly ResourceLoader resourceLoader;
         public MainViewModel()
         {
-        }
-        private async Task<bool> OpenPageAsWindowAsync(Type t)
-        {
-            var view = CoreApplication.CreateNewView();
-            int id = 0;
-
-            await view.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                var frame = new Frame();
-                frame.Navigate(t, null);
-                Window.Current.Content = frame;
-                Window.Current.Activate();
-                id = ApplicationView.GetForCurrentView().Id;
-            });
-
-            return await ApplicationViewSwitcher.TryShowAsStandaloneAsync(id);
+            resourceLoader = new ResourceLoader();
         }
 
         [RelayCommand]
         public async void AddEmployee()
-        {
-            
-            var dialog = new EmployeeDialog();
-            dialog.Title = "Add employee";
+        {           
             var dialogViewModel = new AddEmployeeViewModel();
+            string title = resourceLoader.GetString("AddEmployee");
+            var result = await ShowDialog(title, dialogViewModel);
 
-            dialog.DataContext = dialogViewModel;
-            var result = await dialog.ShowAsync();
             if(result == ContentDialogResult.Primary)
             {
                 Employees.Add(dialogViewModel.Employee);
@@ -92,21 +63,30 @@ namespace EmployeeEditorUWP.ViewModels
         [RelayCommand]
         public async void EditEmployee(Employee employee)
         {
-            var dialog = new EmployeeDialog();
-            dialog.Title = "Edit employee";
+            string title = new ResourceLoader().GetString("EditEmployee");
             var dialogViewModel = new EditEmployeeViewModel(employee);
-            dialog.DataContext = dialogViewModel;
-            var result = await dialog.ShowAsync();
+            var result = await ShowDialog(title, dialogViewModel);
 
             if (result == ContentDialogResult.Primary)
             {
-                Employees[employees.IndexOf(employee)] = dialogViewModel.Employee;
+                Employees[Employees.IndexOf(employee)] = dialogViewModel.Employee;
             }
         }
         [RelayCommand]
         public void RemoveEmployee(Employee employee)
         {
-            employees.Remove(employee);
+            Employees.Remove(employee);
         } 
+        private async Task<ContentDialogResult> ShowDialog(string title, object viewModel)
+        {
+            var dialog = new EmployeeDialog();
+            dialog.Title = dialog.Title = title;
+            dialog.PrimaryButtonText = resourceLoader.GetString("Ok");
+            dialog.SecondaryButtonText = resourceLoader.GetString("Cancel");
+            dialog.DataContext = viewModel;
+            var result = await dialog.ShowAsync();
+
+            return result;
+        }
     }
 }

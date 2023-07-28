@@ -8,7 +8,7 @@
     xmlns:vm="using:EmployeeEditorUWP.ViewModels"
     mc:Ignorable="d"
     Title=""
-    PrimaryButtonText="OK"
+    PrimaryButtonText="ok"
     SecondaryButtonText="Cancel"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
     SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
@@ -16,14 +16,17 @@
         <vm:AddEmployeeViewModel/>
     </ContentDialog.DataContext>
     <Grid>
-        <StackPanel VerticalAlignment="Top"
-                            Grid.Row="0">
+        <StackPanel  Grid.Row="0" 
+                     VerticalAlignment="Top">
+            <TextBox  Header="Name"
+                      x:Uid="Name"
+                     Text="{Binding Employee.Name , Mode=TwoWay}"/>
             <TextBox Header="Name"
-                             Text="{Binding Employee.Name , Mode=TwoWay}"/>
-            <TextBox Header="Surname" 
-                             Text="{Binding Employee.Surname, Mode=TwoWay}"/>
+                     x:Uid="Surname" 
+                     Text="{Binding Employee.Surname, Mode=TwoWay}"/>
             <DatePicker Header="Birthday"
-                                        Date="{Binding Employee.Birthday, Mode=TwoWay}"/>
+                        x:Uid="Birthday"
+                        Date="{Binding Employee.Birthday, Mode=TwoWay}"/>
         </StackPanel>
     </Grid>
 </ContentDialog>

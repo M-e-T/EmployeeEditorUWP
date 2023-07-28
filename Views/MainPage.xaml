@@ -54,7 +54,8 @@
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <TextBlock Text="Employees"
+            <TextBlock x:Uid="Employees"
+                       Text="Employees"
                        HorizontalAlignment="Center"></TextBlock>
             <AppBarButton Command="{Binding AddEmployeeCommand}"
                           HorizontalAlignment="Right">
@@ -114,13 +115,16 @@
             <Grid>
                 <StackPanel VerticalAlignment="Top"
                             Grid.Row="0">
-                    <TextBox Header="Name"
+                    <TextBox Header="Name" 
+                             x:Uid="Name"
                              Text="{Binding SelectedEmployee.Name, Mode=OneWay}"
                              IsReadOnly="True"/>
                     <TextBox Header="Surname" 
+                             x:Uid="Surname" 
                              Text="{Binding SelectedEmployee.Surname, Mode=OneWay}"
                              IsReadOnly="True"/>
-                    <DatePicker Header="Birthday"
+                    <DatePicker Header="Birthday"  
+                                x:Uid="Birthday"
                                 Date="{Binding SelectedEmployee.Birthday, Mode=OneWay}"/>
                 </StackPanel>
             </Grid>

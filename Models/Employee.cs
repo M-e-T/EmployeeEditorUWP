@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace EmployeeEditorUWP.Models
@@ -20,10 +16,7 @@ namespace EmployeeEditorUWP.Models
 
         [ObservableProperty]
         private DateTimeOffset birthday;
-        public Employee()
-        {
-
-        }
+        public Employee() { }
         public Employee(string name, string surname, DateTime birthday)
         {
             Name = name;
