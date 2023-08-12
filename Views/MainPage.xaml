@@ -10,124 +10,112 @@
     
     xmlns:models="using:EmployeeEditorUWP.Models"
     xmlns:vm="using:EmployeeEditorUWP.ViewModels"
-    xmlns:muxc="using:Microsoft.UI.Xaml.Controls">
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:converter="using:EmployeeEditorUWP.Converter"
+    xmlns:usercontrols="using:EmployeeEditorUWP.UserControls"
+    x:Name="Page">
 
+        <!--
     <Page.DataContext>
-        <vm:MainViewModel x:Name="ViewModel"/>
+        <vm:MainViewModel/>
+        <vm:MainViewModel x:Name="MainViewModel"/>
     </Page.DataContext>
+        -->
 
     <Page.Resources>
-        <Style TargetType="TextBox">
-            <Setter Property="Margin" Value="10"/>
-        </Style>
-        <Style TargetType="TextBlock">
-            <Setter Property="Margin" Value="10"/>
-        </Style>
-        <Style TargetType="TextBlock" x:Key="TextBlockListView">
-            <Setter Property="Margin" Value="10"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-        </Style>
+        <vm:MainViewModel x:Key="MainViewModel"/>
+        <converter:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+        <converter:BirthDayFormatConverter x:Key="BirthDayFormatConverter" />
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converter:TimeConverter x:Key="TimeConverter" />
+
+
+        <!--
         <Style TargetType="AppBarButton">
-            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Height" Value="30" />
+            <Setter Property="CornerRadius" Value="5" />
+            <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
-        <Style TargetType="Button">
-            <Setter Property="Margin" Value="10"/>
-        </Style>
-        <Style TargetType="CalendarDatePicker">
-            <Setter Property="Margin" Value="10"/>
-        </Style>
-        <Style TargetType="DatePicker">
-            <Setter Property="Margin" Value="10"/>
-        </Style>
-        <Style TargetType="ListViewItem">
-            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-            <Setter Property="Padding" Value="0" />
-        </Style>
-    </Page.Resources> 
-    <Grid Margin="10">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="350"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <TextBlock x:Uid="Employees"
-                       Text="Employees"
-                       HorizontalAlignment="Center"></TextBlock>
-            <AppBarButton Command="{Binding AddEmployeeCommand}"
-                          HorizontalAlignment="Right">
-                <AppBarButton.Icon>
-                    <SymbolIcon Symbol="Add"/>
-                </AppBarButton.Icon>
-            </AppBarButton>
-            <ListView Grid.Row="1"
-                      ItemsSource="{Binding Employees}" 
-                      SelectedIndex="0"
-                      SelectedItem="{Binding SelectedEmployee, Mode=TwoWay}">
-                <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="models:Employee">
-                        <Grid Margin="0 0 5 0" Height="50">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="auto"/>
-                            </Grid.ColumnDefinitions>
-                                
-                            <TextBlock Grid.Column="0"
-                                       Style="{StaticResource TextBlockListView}"
-                                       Text="{Binding Name}"/>
-                            <TextBlock Grid.Column="1"
-                                       Style="{StaticResource TextBlockListView}"
-                                       Text="{Binding Surname}"/>
-                            <TextBlock Grid.Column="1"
-                                       Style="{StaticResource TextBlockListView}"/>
-                            
-                            <StackPanel Orientation="Horizontal" 
-                                        Grid.Column="2">
-                                <AppBarButton Width="40" Command="{x:Bind ViewModel.EditEmployeeCommand}"
-                                              CommandParameter="{Binding}" >
-                                    <AppBarButton.Icon>
-                                        <SymbolIcon Symbol="Edit"/>
-                                    </AppBarButton.Icon>
-                                </AppBarButton>
-                                <AppBarButton Command="{x:Bind ViewModel.RemoveEmployeeCommand}"
-                                              CommandParameter="{Binding}" 
-                                              Width="40">
-                                    <AppBarButton.Icon>
-                                        <SymbolIcon Symbol="Delete"/>
-                                    </AppBarButton.Icon>
-                                </AppBarButton>
-                            </StackPanel>
-                        </Grid>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </Grid>
+        -->
+
+    </Page.Resources>
+    <Grid Margin="10" DataContext="{StaticResource MainViewModel}">
         <Grid Grid.Column="1"
               Margin="5">
             <Grid.RowDefinitions>
-                <RowDefinition Height="100*"/>
-                <RowDefinition Height="10*"/>
+                <RowDefinition Height="45"/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
-            <Grid>
-                <StackPanel VerticalAlignment="Top"
-                            Grid.Row="0">
-                    <TextBox Header="Name" 
-                             x:Uid="Name"
-                             Text="{Binding SelectedEmployee.Name, Mode=OneWay}"
-                             IsReadOnly="True"/>
-                    <TextBox Header="Surname" 
-                             x:Uid="Surname" 
-                             Text="{Binding SelectedEmployee.Surname, Mode=OneWay}"
-                             IsReadOnly="True"/>
-                    <DatePicker Header="Birthday"  
-                                x:Uid="Birthday"
-                                Date="{Binding SelectedEmployee.Birthday, Mode=OneWay}"/>
-                </StackPanel>
-            </Grid>
+            <StackPanel Orientation="Vertical">
+
+                <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" HorizontalAlignment="Left">
+
+                    <AppBarButton Command="{Binding AddEmployeeCommand}" Icon="Add" Label="Add"/>
+
+                    <AppBarToggleButton IsChecked="{Binding EditMode, Mode=TwoWay}"
+                                        VerticalAlignment="Center" 
+                                        Icon="Edit" Label="Edit">
+
+                    </AppBarToggleButton>
+                </CommandBar>
+            </StackPanel>
+            <controls:DataGrid x:Name="DataGrieEmployee"
+                               Grid.Row="1" 
+                               ItemsSource="{Binding Employees, Mode=TwoWay, Source={StaticResource MainViewModel}}"
+                               AutoGenerateColumns="False"
+                               IsReadOnly="True">
+                <controls:DataGrid.Columns>
+                    <controls:DataGridTemplateColumn Header="Name"
+                                                     x:Uid="Name">
+                        <controls:DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <usercontrols:DataGridTextCell Text="{Binding Name, Mode=TwoWay}" 
+                                                               EditMode="{Binding EditMode, Source={StaticResource MainViewModel}}"/>
+                            </DataTemplate>
+                        </controls:DataGridTemplateColumn.CellTemplate>
+                    </controls:DataGridTemplateColumn>
+
+                    <controls:DataGridTemplateColumn Header="Surname" 
+                                                     x:Uid="Surname">
+                        <controls:DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <usercontrols:DataGridTextCell Text="{Binding Surname, Mode=TwoWay}"
+                                                               EditMode="{Binding EditMode, Source={StaticResource MainViewModel}}"/>
+                            </DataTemplate>
+                        </controls:DataGridTemplateColumn.CellTemplate>
+                    </controls:DataGridTemplateColumn>
+
+                    <controls:DataGridTemplateColumn Header="Birthday" 
+                                                     x:Uid="Birthday">
+                        <controls:DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <usercontrols:DataGridDateCell Date="{Binding Birthday}" 
+                                                               EditMode="{Binding EditMode, Source={StaticResource MainViewModel}}"/>
+                            </DataTemplate>
+                        </controls:DataGridTemplateColumn.CellTemplate>
+                    </controls:DataGridTemplateColumn>
+
+                    <controls:DataGridTemplateColumn Width="*">
+                        <controls:DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <AppBarButton Height="35"
+                                              Width="35"
+                                              HorizontalAlignment="Right"
+                                              Command="{Binding RemoveEmployeeCommand, Source={StaticResource MainViewModel}}"
+                                              CommandParameter="{Binding}"
+                                              Visibility="{Binding EditMode, Source={StaticResource MainViewModel}}">
+                                    <AppBarButton.Icon>
+                                        <SymbolIcon Symbol="Delete"  
+                                                    Margin="0,-10,0,10"/>
+                                    </AppBarButton.Icon>
+                                </AppBarButton>
+                            </DataTemplate>
+                        </controls:DataGridTemplateColumn.CellTemplate>
+                    </controls:DataGridTemplateColumn>
+
+                </controls:DataGrid.Columns>
+            </controls:DataGrid>
         </Grid>
     </Grid>
 </Page>

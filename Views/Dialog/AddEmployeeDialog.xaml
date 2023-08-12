@@ -1,20 +1,29 @@
 ﻿<ContentDialog
-    x:Class="EmployeeEditorUWP.Views.EmployeeDialog"
+    x:Class="EmployeeEditorUWP.Views.Dialog.AddEmployeeDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:EmployeeEditorUWP.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:vm="using:EmployeeEditorUWP.ViewModels"
+    xmlns:converter="using:EmployeeEditorUWP.Converter"
     mc:Ignorable="d"
     Title=""
     PrimaryButtonText="ok"
     SecondaryButtonText="Cancel"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
-    SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
-    <ContentDialog.DataContext>
-        <vm:AddEmployeeViewModel/>
-    </ContentDialog.DataContext>
+    SecondaryButtonClick="ContentDialog_SecondaryButtonClick" 
+    x:Uid="AddDialog">
+
+    <ContentDialog.Resources>
+        <converter:TimeConverter x:Key="TimeConverter" />
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="10"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="10"/>
+        </Style>
+    </ContentDialog.Resources>
     <Grid>
         <StackPanel  Grid.Row="0" 
                      VerticalAlignment="Top">
@@ -26,7 +35,7 @@
                      Text="{Binding Employee.Surname, Mode=TwoWay}"/>
             <DatePicker Header="Birthday"
                         x:Uid="Birthday"
-                        Date="{Binding Employee.Birthday, Mode=TwoWay}"/>
+                        Date="{Binding Employee.Birthday, Mode=TwoWay, Converter={StaticResource TimeConverter}}"/>
         </StackPanel>
     </Grid>
 </ContentDialog>

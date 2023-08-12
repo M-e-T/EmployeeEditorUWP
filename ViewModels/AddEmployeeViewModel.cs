@@ -13,14 +13,13 @@ using Windows.System;
 namespace EmployeeEditorUWP.ViewModels
 {
 
-    [INotifyPropertyChanged]
-    public partial class AddEmployeeViewModel
+    public partial class AddEmployeeViewModel : ObservableObject
     {
         [ObservableProperty]
-        private Employee employee = new Employee() { Birthday = DateTime.Now };
-        public AddEmployeeViewModel()
+        private Employee employee;
+        public AddEmployeeViewModel(int id)
         {
-            var appView = Windows.UI.ViewManagement.ApplicationView.GetForCurrentView();
+            Employee = new Employee(id) { Birthday = DateTime.Now };
         }
     }
 }

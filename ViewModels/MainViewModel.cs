@@ -1,59 +1,35 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 using EmployeeEditorUWP.Models;
-using EmployeeEditorUWP.Views;
+using EmployeeEditorUWP.Views.Dialog;
 
 namespace EmployeeEditorUWP.ViewModels
 {
-    //[INotifyPropertyChanged]
+
     public partial class MainViewModel : ObservableObject
     {
         [ObservableProperty]
         private ObservableCollection<Employee> employees = new ObservableCollection<Employee>()
         {
-            new Employee() { Name = "Name1", Surname = "Surname2", Birthday = DateTime.Now },
-            new Employee() { Name = "Name2", Surname = "Surname2", Birthday = DateTime.Now },
+            new Employee(1) { Name = "Name1", Surname = "Surname1", Birthday = DateTime.Now },
+            new Employee(2) { Name = "Name2", Surname = "Surname2", Birthday = DateTime.Now },
+            new Employee(3) { Name = "Name3", Surname = "Surname3", Birthday = DateTime.Now },
         };
 
         [ObservableProperty]
-        private Employee selectedEmployee;
-        //public Developer SelectedDeveloper
-        //{
-        //    get => selectedDeveloper;
-        //    set
-        //    {
-        //        SetProperty(ref selectedDeveloper, value);
-        //    }
-        //}
-        //private int _index;
-        ////[ObservableProperty]
-        //public int Index
-        //{
-        //    get => _index;
-        //    set
-        //    {
-        //        SetProperty(ref _index, value);
-        //        Debug.WriteLine(value);
-        //    }
-        //}
-        private readonly ResourceLoader resourceLoader;
-        public MainViewModel()
-        {
-            resourceLoader = new ResourceLoader();
-        }
+        private bool editMode = false;
+        public MainViewModel() { }
 
         [RelayCommand]
-        public async void AddEmployee()
-        {           
-            var dialogViewModel = new AddEmployeeViewModel();
-            string title = resourceLoader.GetString("AddEmployee");
-            var result = await ShowDialog(title, dialogViewModel);
+        public async Task AddEmployee()
+        {
+            var dialogViewModel = new AddEmployeeViewModel(Employees.Count);
+            var result = await AddDialog(dialogViewModel);
 
             if(result == ContentDialogResult.Primary)
             {
@@ -61,32 +37,22 @@ namespace EmployeeEditorUWP.ViewModels
             }
         }
         [RelayCommand]
-        public async void EditEmployee(Employee employee)
+        public async Task RemoveEmployee(Employee employee)
         {
-            string title = new ResourceLoader().GetString("EditEmployee");
-            var dialogViewModel = new EditEmployeeViewModel(employee);
-            var result = await ShowDialog(title, dialogViewModel);
-
-            if (result == ContentDialogResult.Primary)
-            {
-                Employees[Employees.IndexOf(employee)] = dialogViewModel.Employee;
-            }
+            if(await DialogRemove(employee) == ContentDialogResult.Primary)
+                Employees.Remove(employee);
         }
-        [RelayCommand]
-        public void RemoveEmployee(Employee employee)
+        private async Task<ContentDialogResult> AddDialog(AddEmployeeViewModel viewModel)
         {
-            Employees.Remove(employee);
-        } 
-        private async Task<ContentDialogResult> ShowDialog(string title, object viewModel)
-        {
-            var dialog = new EmployeeDialog();
-            dialog.Title = dialog.Title = title;
-            dialog.PrimaryButtonText = resourceLoader.GetString("Ok");
-            dialog.SecondaryButtonText = resourceLoader.GetString("Cancel");
+            var dialog = new AddEmployeeDialog();
             dialog.DataContext = viewModel;
-            var result = await dialog.ShowAsync();
-
-            return result;
+            return await dialog.ShowAsync();
+        }
+        private async Task<ContentDialogResult> DialogRemove(Employee employee)
+        {
+            var dialog = new RemoveEmployeeDialog();
+            dialog.DataContext = new EditEmployeeViewModel(employee);
+            return await dialog.ShowAsync();
         }
     }
 }

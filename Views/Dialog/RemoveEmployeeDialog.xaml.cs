@@ -1,12 +1,13 @@
 ﻿using Windows.UI.Xaml.Controls;
 
+
 // Документацию по шаблону элемента "Диалоговое окно содержимого" см. по адресу https://go.microsoft.com/fwlink/?LinkId=234238
 
-namespace EmployeeEditorUWP.Views
+namespace EmployeeEditorUWP.Views.Dialog
 {
-    public sealed partial class EmployeeDialog : ContentDialog
+    public sealed partial class RemoveEmployeeDialog : ContentDialog
     {
-        public EmployeeDialog()
+        public RemoveEmployeeDialog()
         {
             this.InitializeComponent();
         }
