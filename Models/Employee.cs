@@ -18,7 +18,7 @@ namespace EmployeeEditorUWP.Models
         private string surname;
 
         [ObservableProperty]
-        private DateTime birthday;
+        private DateTimeOffset birthday;
         public Employee() { }
         public Employee(int id) { this.id = id; }
         public Employee(string name, string surname, DateTime birthday)

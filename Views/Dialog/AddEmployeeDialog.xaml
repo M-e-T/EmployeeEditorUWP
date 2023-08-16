@@ -35,7 +35,7 @@
                      Text="{Binding Employee.Surname, Mode=TwoWay}"/>
             <DatePicker Header="Birthday"
                         x:Uid="Birthday"
-                        Date="{Binding Employee.Birthday, Mode=TwoWay, Converter={StaticResource TimeConverter}}"/>
+                        Date="{Binding Employee.Birthday, Mode=TwoWay}"/>
         </StackPanel>
     </Grid>
 </ContentDialog>

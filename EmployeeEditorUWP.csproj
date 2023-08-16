@@ -120,12 +120,6 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="UserControls\DataGridDateCell.xaml.cs">
-      <DependentUpon>DataGridDateCell.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\DataGridTextCell.xaml.cs">
-      <DependentUpon>DataGridTextCell.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ViewModels\AddEmployeeViewModel.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -168,14 +162,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="UserControls\DataGridDateCell.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\DataGridTextCell.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\Dialog\AddEmployeeDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
