@@ -21,8 +21,6 @@ namespace EmployeeEditorUWP.ViewModels
             new Employee(3) { Name = "Name3", Surname = "Surname3", Birthday = DateTime.Now },
         };
 
-        [ObservableProperty]
-        private bool editMode = false;
         public MainViewModel() { }
 
         [RelayCommand]
@@ -39,8 +37,11 @@ namespace EmployeeEditorUWP.ViewModels
         [RelayCommand]
         public async Task RemoveEmployee(Employee employee)
         {
-            if(await DialogRemove(employee) == ContentDialogResult.Primary)
+            var result = await DialogRemove(employee);
+            if (result == ContentDialogResult.Primary)
+            {
                 Employees.Remove(employee);
+            }
         }
         private async Task<ContentDialogResult> AddDialog(AddEmployeeViewModel viewModel)
         {
